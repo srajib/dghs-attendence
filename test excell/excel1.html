@@ -1,0 +1,247 @@
+<html>
+<head>
+<table bgcolor="#62AB18" width=1024px align="center">
+<tr>
+<td>
+<img src="images/bangladesh-logo.png" alt=""  />
+<td>
+<td><img src="images/bangladesh-mis.png" alt="" /><td>
+<tr>
+</table>
+<table width=1024px bgcolor="#DF4C17" align="center" >
+<tr>
+<td ></td>
+</tr>
+</table>
+<table width=1024px bgcolor="#fff" align="center">
+<tr>
+<td ></td>
+</tr>
+</table>
+<script src="js/jscal2.js"></script>
+    <script src="js/lang/en.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/jscal2.css" />
+    <link rel="stylesheet" type="text/css" href="css/border-radius.css" />
+    <link rel="stylesheet" type="text/css" href="css/steel/steel.css" />
+<script type="text/javascript"> 
+function loadXL() 
+{ 
+var f_date1=document.form1.f_date1.value; 
+var f_date2=document.form1.f_date2.value; 
+var empcode=document.form1.empcode.value; 
+var department=document.empcode.department.value;
+var xmlhttp; 
+if (window.XMLHttpRequest) 
+  {// code for IE7+, Firefox, Chrome, Opera, Safari 
+  xmlhttp=new XMLHttpRequest(); 
+  } 
+else 
+  {// code for IE6, IE5 
+  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP"); 
+  } 
+xmlhttp.onreadystatechange=function() 
+  { 
+  if (xmlhttp.readyState==4 && xmlhttp.status==200) 
+    { 
+    document.getElementById("mydiv").innerHTML=xmlhttp.responseText; 
+    } 
+  } 
+xmlhttp.open("GET","export1.php?f_date1="+f_date1+"&f_date2="+f_date2+"&empcode="+empcode+"&department="+department,true); 
+xmlhttp.send(); 
+} 
+</script>
+</head>
+<body width=1024px>
+<?php
+include('db.php');
+?>
+  <label></label>
+  <form method="post" action="" name="form1" id="form1">
+    <table width="1024px" align="center">
+      <tr>
+        <td width="101">Date From </td>
+        <td width="180"><input size="15" id="f_date1" name="f_date1" value="<?php echo @$_POST['f_date1'];?>" />
+            <button id="f_btn1">...</button>
+          <br />
+            <script type="text/javascript">//<![CDATA[
+      Calendar.setup({
+        inputField : "f_date1",
+        trigger    : "f_btn1",
+        onSelect   : function() { this.hide() },
+        dateFormat : "%Y-%m-%d"
+      });
+    //]]></script>
+        </td>
+        <td width="21"> To </td>
+        <td width="164"><input size="15" id="f_date2" name="f_date2" value="<?php echo @$_POST['f_date2'];?>"/>
+            <button id="f_btn2">...</button>
+          <br />
+            <script type="text/javascript">//<![CDATA[
+      Calendar.setup({
+        inputField : "f_date2",
+        trigger    : "f_btn2",
+        onSelect   : function() { this.hide() },
+         dateFormat : "%Y-%m-%d"
+      });
+    //]]></script>
+        </td>
+        <td width="75">Department </td>
+        <td width="118" ><input name="department" type='text' id="department" size="20" value="<?php echo @$_POST['department'];?>"></td>
+        <td width="69">Staff ID</td>
+        <td width="126"><input name="empcode" type='text' id="empcode" value="<?php echo @$_POST['empcode'];?>" size="20"></td>
+        <td width="130"><input name="submit" type="submit" value="Show Report" /> </td>
+      </tr>
+      <tr>
+	   <td><?php echo '<a href="javascript:window.print()">Print</a>'; ?></td>
+        <td ><input type="button" name="Button" value="Export to Excel" onClick="loadXL()"></td>
+      </tr>
+    </table>
+  </form>
+
+    <?php	
+    if(isset($_POST['f_date1']))
+    {  
+	  
+	  // $delAttnd="Delete from tb_jobcard";
+      // mysql_query($delAttnd);
+	  
+	  //echo $hosid;
+     	$empcode = $_POST['empcode'];
+		$department  = $_POST['department'];
+		$fromDatee   =   $_POST['f_date1'];
+        $toDatee     =   $_POST['f_date2'];
+		//echo $fromDatee;	
+		$date1 = $fromDatee;
+        $date2 = $toDatee;
+
+        $diff = (strtotime($date2) - strtotime($date1));
+		$diff1=round(($diff/86400)+0.5);
+		
+	//echo "day count : $diff1";
+	
+	$weekday1 = strtotime("$date2",5) - strtotime("$date1",5);
+	$weekfri = floor($weekday1 / 604800);
+	$weekday2 = strtotime("$date2",6) - strtotime("$date1",6);
+	$weeksat = floor($weekday2 / 604800);
+	
+	$totalweekday=	$weekfri + $weeksat;
+    //echo "total weekend : $totalweekday";
+
+    $payableday = $diff1-$totalweekday;
+					
+?>
+
+<table width=1024px; align="center">
+   
+    <tr bgcolor="#8BB5EB">
+        <td  width=20px; align="center">SL</td>
+		<td width=30px; align="center">Event Date</td>
+        <td width=65px; align="center">In Time</td>
+		<td width=65px; align="center">Out Time</td>
+		<td width=65px; align="center">Working Hour</td>
+		<td width=65px; align="center">Status</td>
+    </tr>
+  
+<?PHP
+            $n=1;
+			//echo mysql_num_rows(@$res_emp);
+						 	      
+				for($i=0; $i<=$diff1-1; $i++)
+            	{
+ 		 			$date = $date1;
+					$newdate = strtotime ( '+'.$i.' day' , strtotime ( $date ) ) ;
+					$newdate = date ( 'Y-m-j' , $newdate ); 
+					//echo $newdate;		
+			   $sql_cnt2 = "SELECT e.staffid,e.empname,e.hosid,DATE(t.timing) AS edate,MIN(TIME(t.timing)) AS entry,MAX(TIME(t.timing)) AS outs FROM employees e,LOGS t WHERE  e.staffid=t.staffid AND e.hosid=t.hosid AND DATE(t.timing) ='$newdate' and t.staffid='$empcode' and e.department='$department'";                
+				
+                 $res_cnt2 = mysql_query($sql_cnt2);
+                 $row_cnt2 = mysql_fetch_object($res_cnt2);
+				 $name=$row_cnt2->empname;
+				 $id=$row_cnt2->staffid;
+				 $evt_date=$row_cnt2->edate;
+				 $entry=$row_cnt2->entry;
+				 $outs=$row_cnt2->outs;
+				 $hosid=$row_cnt2->hosid;
+				 //$timediff=abs($outs - $entry);	
+				   				 
+				 /*if($entry>'09:15:00')
+				 {
+				 $status='Late';
+				 }
+				 else{
+				 $status='Present';
+				 }
+				 if(empty($entry) ) 
+				 {
+				 $status='Absent';
+				 }	*/
+				 
+				 
+			//echo "evt: $evt_date"," in: $entry "," OUT : $out ";
+												
+			 $dd="insert into tb_jobcard(emp_code,event_date,in_time,out_time,status)
+			 values('$id','$evt_date','$entry','$outs','$status')";
+			 mysql_query($dd);
+			
+			  if($n%2==0)
+                {
+                ?>
+                <tr style="background-color: #BDD9FD;">
+                <?php 
+                }else{
+                    ?> 
+                <tr style="background-color: #E6F2FF;">
+                    <?php
+                } ?>
+				    <td align="center"><?php echo $n;$n++; ?></td>
+					<td align="left"><?php echo  $evt_date; ?></td>
+					<td align="center"><?php echo $entry; ?></td>
+					<td align="center"><?php echo $outs; ?> </td>
+					<td align="center"><?php echo $timediff; ?> </td>
+					<td align="center"><?php echo $status; ?> </td>
+					
+  				</tr>
+	   
+                <?php 
+				 
+	
+            }
+			$sql_cnt = "SELECT count(distinct(date(timing))) as PRESENT FROM logs WHERE hosid ='$hosid' AND staffid ='$id'
+                    AND date(timing) >= '$fromDatee' AND date(timing) <= '$toDatee'";
+                //echo $sql_cnt;
+				
+                $res_cnt = mysql_query($sql_cnt);
+                $row_cnt = mysql_fetch_object($res_cnt);
+				
+				$absent=$payableday - $row_cnt->PRESENT;
+				
+				$sql_cnt1 = "SELECT count(distinct(date(timing))) as LATE FROM logs WHERE hosid ='$hosid' AND staffid ='$id'
+                    AND date(timing) >= '$fromDatee' AND date(timing) <= '$toDatee' and Time(timing)>'09:15:00'";
+                //echo $sql_cnt;
+				
+                $res_cnt1 = mysql_query($sql_cnt1);
+                $row_cnt1 = mysql_fetch_object($res_cnt1);
+						
+				
+				if($absent<0){
+				$absent=0;
+				}?>
+				
+			  <table border="1px" width="500px" align="center">
+			  <tr><td align="center"></strong>Total Summery</strong></td></tr>
+			  <tr>
+			  <td><?php echo "Total present : $row_cnt->PRESENT Days";?></td>
+			  <td><?php echo "Total Absent  : $absent Days";?></td>
+			  </tr>
+			  <tr>
+			   <td><?php echo "Total weekend : $weeksat Days";?></td>
+			   <td><?php echo "Total  Late    : $row_cnt1->LATE Days";?></td>
+			  </tr>
+			  </table>
+			  
+	<?
+	}	
+?>
+</table>
+</body>
+</html>

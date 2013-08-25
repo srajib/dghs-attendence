@@ -1,0 +1,98 @@
+#tablayoutfrm{
+	width:100%;
+	margin: 0 auto;
+	border-collapse:collapse;
+}
+#tablayoutfrm  .leftsidebar, #tablayoutfrm  .rightcontent{vertical-align:top; padding: 0 5px; margin: 0;}
+.leftsidebar{
+	width: 400px;
+	/*border: 1px solid #b9cce2;*/
+	/* background: #ecf1f7; */
+}
+.rightcontent{
+	
+}
+
+
+
+.focusblur{color: #bbb;}
+#form{
+	margin: 10px auto;
+	padding: 10px;
+	border: 1px solid #ccd8e6;
+	/*border-radius: 5px 5px 5px 5px;*/
+	background: #ecf1f7;
+	font-family: sans-serif,arial;
+	font-size: 12px;
+}
+h2,h3,h4{
+	margin: 0;
+	padding: 0;
+}
+#form div{padding: 2px 0;}
+#form input[type="text"]{padding: 2px;border:1px solid #b9cce2; border-radius: 2px 2px 2px 2px;}
+#form input[type="text"]:focus{border:1px solid #eeb9e2;}
+
+#form input[type="submit"]{padding: 3px; background: #fdd;border: 1px solid #caa;cursor: pointer; border-radius: 2px 2px 2px 2px;}
+#form input[type="submit"]:hover{background: #fee;border: 1px solid #caa;}
+
+#form input[type="password"]{padding: 2px;border:1px solid #b9cce2; border-radius: 2px 2px 2px 2px;}
+#form input[type="password"]:focus{border:1px solid #eeb9e2;}
+
+#form select{width: 257px; padding: 2px;border:1px solid #b9cce2; border-radius: 2px 2px 2px 2px;}
+#form  .emp_reg{width: 250px;}
+
+.leftsidebar #form h3{margin:0; padding: 2px; font-family: arial,sans-serif; font-size: 18px; font-weight: normal; color: #4e7098;}
+
+
+#datatab{
+	width:100%;
+	margin: 0 auto;
+	border-collapse:collapse;
+	background: #fff;
+	font-size: 0.9em;
+	color: 000;
+	font-size: 12px;
+}
+#datatab thead tr th{
+	text-align:left;
+	padding: 5px;
+	background: #c7d3e1;
+	border: 1px solid #b1c2d5;
+}
+#datatab tfoot tr th{
+	text-align:center;
+	padding: 0 10px;
+	background: #dde;
+}
+#datatab tbody tr td{
+	padding: 4px 5px;
+	border: 1px solid #c7d3e1
+}
+#datatab tbody tr.stat-0{color: #faa;}
+#datatab tbody tr.stat-1{color: #000;}
+#datatab tbody tr .sno{width: 40px;}
+#datatab tbody tr .en{width: 200px;}
+#datatab tbody tr .des{width: 100px;}
+#datatab tbody tr .dep{width: 100px;}
+#datatab tbody tr td .nco{color: #f00;}
+#datatab tbody tr .date{width: 90px;}
+#datatab tbody tr .inout{width: 60px;}
+#datatab tbody tr .action{width: 60px;}
+#datatab tbody tr:hover{ background: #ecf1f7; }
+#datatab .action a{padding: 0 5px; /*  width: 20px; height: 20px; background: url('iamges/'); float: left; margin: 0 2px;*/}
+#datatab tr .center{text-align: center;}
+
+#form #pagination{padding: 5px; background: #dfe7f1;}
+#form #pagination input[type="button"]{padding: 2px 8px; background: #edf7eb; border: 1px solid #87a4c5; color: #286b1f; cursor: pointer;}
+#form #pagination input[type="button"]:hover{background: #ffeec0; color: #b29138;}
+#form #pagination #page-selector{padding: 2px 5px;border: 1px solid #87a4c5;background: #edf7eb;color: #286b1f;}
+
+.emp_reg{width: 250px;}
+.frm_tab{margin: 0 auto;}
+.discol{color: #31547d; background: #dde1e6; font-weight: bold;}
+.print_command{padding: 5px 0;}
+a.print_button{background: #e9f0f7; border: 1px solid #abbed5; color: #000; padding: 2px 7px;}
+
+
+

@@ -1,0 +1,252 @@
+<html>
+<head>
+<table bgcolor="#62AB18" width=1050>
+<tr>
+<td>
+<img src="bangladesh-logo.png" alt=""  />
+<td>
+<td><img src="bangladesh-mis.png" alt="" /><td>
+<tr>
+</table>
+<table width=1050px bgcolor="#fdcre0"></table>
+<script src="js/jscal2.js"></script>
+    <script src="js/lang/en.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/jscal2.css" />
+    <link rel="stylesheet" type="text/css" href="css/border-radius.css" />
+    <link rel="stylesheet" type="text/css" href="css/steel/steel.css" />
+</head>
+<body>
+<?php
+include('db.php');
+?>
+
+  <form method="post" action="">         
+           
+<table>
+ <tr>
+  <td>
+   <input size="20" id="f_date1" name="f_date1" /><button id="f_btn1">...</button><br />
+    <script type="text/javascript">//<![CDATA[
+      Calendar.setup({
+        inputField : "f_date1",
+        trigger    : "f_btn1",
+        onSelect   : function() { this.hide() },
+        dateFormat : "%Y-%m-%d"
+      });
+    //]]></script>
+	</td>
+	<td></td>
+	<td>
+	<input size="20" id="f_date2" name="f_date2" /><button id="f_btn2">...</button><br />
+    <script type="text/javascript">//<![CDATA[
+      Calendar.setup({
+        inputField : "f_date2",
+        trigger    : "f_btn2",
+        onSelect   : function() { this.hide() },
+         dateFormat : "%Y-%m-%d"
+      });
+    //]]></script>
+	</td>
+	
+	</tr>
+	</table>
+	
+			<table>
+			<tr>
+            <td> Staff ID </td>
+			<td></td>
+			<td ><input type='text' id="empcode" name="empcode" ></input></td>
+			<td><label>Department   </label></td>
+			<td></td>
+			<td><input type='text' id="department" name="department"></input></td>
+            <td><label>Designtion</label></td>
+			<td></td>
+			<td><input type='text' id="designation" name="designation"></input>	</td>
+			<td><input type="submit" value="Show Report" />	</td>
+							
+            </tr>
+			
+    </form>
+
+    <?php
+	
+	//print_r($_POST);
+    if(isset($_POST['f_date1']))
+    { 
+     	$empcode = $_POST['empcode'];
+		$department = $_POST['department'];
+		$designation = $_POST['designation'];
+		$fromDatee   =   $_POST['f_date1'];
+        $toDatee     =   $_POST['f_date2'];
+		//echo $fromDatee;
+       // $fromDate   =   date("Y-m-d",strtotime($fromDatee));
+       // $toDate     =   date("Y-m-d",strtotime($toDatee)); 
+		/*$fromDatee   =   $_POST['date_year_from'].'-'.$_POST['date_mon_from'].'-'.$_POST['date_day_from'];
+        /$toDatee     =   $_POST['date_year_to'].'-'.$_POST['date_mon_to'].'-'.$_POST['date_day_to'];*/ 
+		
+		$date1 = $fromDatee;
+        $date2 = $toDatee;
+
+        $diff = (strtotime($date2) - strtotime($date1));
+		$diff1=round(($diff/86400)+0.5);
+		
+		
+	//echo "day count : $diff1";
+	
+	$weekday1 = strtotime("$date2",5) - strtotime("$date1",5);
+	$weekfri = floor($weekday1 / 604800);
+	$weekday2 = strtotime("$date2",6) - strtotime("$date1",6);
+	$weeksat = floor($weekday2 / 604800);
+	$totalweekday = $weekfri + $weeksat;
+	
+    //echo "total weekend : $totalweekday";
+
+    $payableday = $diff1-$totalweekday;
+
+  if(empty($empcode) && empty($department) && empty($designation))
+  {     
+        $sql_emp = "
+            SELECT *
+            FROM employees
+            WHERE status=1
+			ORDER BY staffid
+        ";
+		$res_emp = mysql_query($sql_emp);
+        }        
+		elseif(!empty($empcode) && empty($department) ){
+		$sql_emp = "
+            SELECT *
+            FROM employees
+            WHERE status=1
+			and staffid='$empcode'
+			ORDER BY staffid
+        ";         	
+	   $res_emp = mysql_query($sql_emp); 
+		}
+		elseif(empty($empcode) && !empty($department)){
+		$sql_emp = "
+            SELECT *
+            FROM employees
+            WHERE status=1
+			and department='$department'
+			ORDER BY staffid
+        ";         	
+	   $res_emp = mysql_query($sql_emp);  
+	  
+		}
+		elseif(!empty($designation)){
+		$sql_emp = "
+            SELECT *
+            FROM employees
+            WHERE status=1
+			and designation='$designation'
+			ORDER BY staffid
+        ";         	
+	   $res_emp = mysql_query($sql_emp);  
+	   
+		}
+		elseif(!empty($designation) && !empty($department) && empty($empcode)){
+		$sql_emp = "
+            SELECT *
+            FROM employees
+            WHERE status=1
+			and designation='$designation'
+			and department='$department'
+			ORDER BY staffid
+        ";         	
+	   $res_emp = mysql_query($sql_emp);  
+	   
+		}
+		else{
+		$sql_emp = "
+            SELECT *
+            FROM employees
+            WHERE status=1
+			and staffid='$empcode'
+			and department='$department'
+			ORDER BY staffid
+        ";         	
+	   $res_emp = mysql_query($sql_emp);     
+       }
+    }
+
+	
+?>
+
+</div>
+<div id="show_report">
+<div style ="font-size: 12px;">
+    Report Date <?php echo @$date1; ?> To <?php echo  @$date2; ?> 
+</div>
+<table>
+    <tr bgcolor="#8BB5EB">
+        <td>SL</td>
+        <td>Employee Name</td>
+        <td>Designation</td>
+        <td>Department</td>
+        <td width=65px; align="center">Total Present</td>
+		<td width=65px; align="center">Total Absent</td>
+		<td width=65px; align="center">Total weekend</td>
+		<td width=65px; align="center">Total Leave</td>
+		<td width=65px; align="center">Total Holiday</td>
+
+    </tr>
+  
+<?PHP
+
+if(mysql_num_rows(@$res_emp)>0)
+        {
+            $i=1;
+			//echo mysql_num_rows(@$res_emp);
+			$empcount=mysql_num_rows(@$res_emp);
+			echo "<font-size=11px>Total Staff : $empcount </font>";
+            while($row_emp = mysql_fetch_object($res_emp))
+            {
+			  
+                $sql_cnt = "
+                    SELECT count(distinct(date(timing))) as PRESENT
+                    FROM logs
+                    WHERE hosid     = $row_emp->hosid
+                    AND staffid     = $row_emp->staffid
+                    AND date(timing) >= '$fromDatee'
+                    AND date(timing) <= '$toDatee'                
+                ";
+                //echo $sql_cnt;
+				
+                $res_cnt = mysql_query($sql_cnt);
+                $row_cnt = mysql_fetch_object($res_cnt);
+				$absent=$payableday - $row_cnt->PRESENT;
+				if($absent<0){
+				$absent=0;
+				}
+                if($i%2==0)
+                {
+                ?>
+                <tr style="background-color: #BDD9FD;">
+                <?php 
+                }else{
+                    ?>
+                    <tr style="background-color: #E6F2FF;">
+                    <?php
+                } ?>
+				
+	                <td><?php echo $i;$i++; ?></td>
+                    <td><?php echo $row_emp->empname; ?></td>
+                    <td><?php echo $row_emp->designation; ?></td>
+                    <td><?php echo $row_emp->department; ?></td>
+                    <td align="center"><?php echo $row_cnt->PRESENT; ?></td>
+					<td align="center"><?php echo $absent ?></td>
+					<td align="center"><?php echo $totalweekday ?></td>
+					<td align="center"><?php echo 0 ?></td>
+					<td align="center"><?php echo 0 ?></td>
+                </tr>
+                <?php        
+                
+            }
+        }
+        
+?>
+</table>
+</div>
+</bddy>
+</html>

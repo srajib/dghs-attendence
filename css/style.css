@@ -1,0 +1,27 @@
+body{
+	margin: 0;
+	padding: 0;
+	font-family: sans-serif,arial;
+	background: #f4f9ff;
+}
+a{text-decoration: none; color: #1c59a2;}
+#supper-wrapper{}
+.wrapper{margin: 0 auto;}
+.sheet{margin: 0 auto;width: 1000px;}
+#header-wrapper{background: #ecf1f7; border-top: 1px solid #c0cddd; border-bottom: 1px solid #e5ecf4; padding: 5px 0 0 0; color: #fff;}
+#menu-wrapper{background: #c7d3e1; color: #fff; border-bottom: 2px solid #6787ad;}
+#path-wrapper{background: #ecf1f7; color: #fff; padding: 3px 0 0 0; border-top: 1px solid #b9cce2;border-bottom: 1px solid #b9cce2;}
+#main-wrapper{}
+#footer-wrapper{position: fixed; width: 100%; bottom: 0; color: #3a597d; font-size: 0.7em;}
+#header{min-height: 22px;}
+#dghs_banner{position: relative; height: 100px; background: #238a07;}
+#path{min-height: 25px;}
+#main{min-height: 300px;}
+#menu{min-height: 25px;}
+#footer{min-height: 20px; padding: 5px 0 0 0; text-align: center;background: #c7d3e1;}
+#footer a{color: #1682ff;}
+#header a{color: #a22;}
+
+#success-msg{text-align: center;}
+#success-msg a{color: #f00; font-size: 15px;}
+#success-msg a:hover{color: #00f;}
